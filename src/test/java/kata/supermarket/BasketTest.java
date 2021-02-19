@@ -17,7 +17,7 @@ class BasketTest {
     @DisplayName("basket provides its total value when containing...")
     @MethodSource
     @ParameterizedTest(name = "{0}")
-    void basketProvidesTotalValue(String description, String expectedTotal, Iterable<Item> items) {
+    void basketProvidesTotalValue(String description, String expectedTotal, Iterable<Product> items) {
         final Basket basket = new Basket();
         items.forEach(basket::add);
         assertEquals(new BigDecimal(expectedTotal), basket.total());
@@ -56,27 +56,27 @@ class BasketTest {
         return Arguments.of("no items", "0.00", Collections.emptyList());
     }
 
-    private static Item aPintOfMilk() {
-        return new Product(new BigDecimal("0.49")).oneOf();
+    private static Product aPintOfMilk() {
+        return new Product(new ProductPrice(new BigDecimal(0.49), new BigDecimal(1.0)));
     }
 
-    private static Item aPackOfDigestives() {
-        return new Product(new BigDecimal("1.55")).oneOf();
+    private static Product aPackOfDigestives() {    	
+        return new Product(new ProductPrice(new BigDecimal(1.55), new BigDecimal(1.0)));
     }
 
-    private static WeighedProduct aKiloOfAmericanSweets() {
-        return new WeighedProduct(new BigDecimal("4.99"));
+    private static Product aKiloOfAmericanSweets() {
+        return new Product(new ProductPrice(new BigDecimal("4.99"), new BigDecimal("1.0")));
     }
 
-    private static Item twoFiftyGramsOfAmericanSweets() {
-        return aKiloOfAmericanSweets().weighing(new BigDecimal(".25"));
+    private static Product twoFiftyGramsOfAmericanSweets() {
+        return aKiloOfAmericanSweets().updateProductUnits(new BigDecimal(".25"));
     }
 
-    private static WeighedProduct aKiloOfPickAndMix() {
-        return new WeighedProduct(new BigDecimal("2.99"));
+    private static Product aKiloOfPickAndMix() {
+        return new Product(new ProductPrice(new BigDecimal("2.99"), new BigDecimal("1.0")));
     }
 
-    private static Item twoHundredGramsOfPickAndMix() {
-        return aKiloOfPickAndMix().weighing(new BigDecimal(".2"));
+    private static Product twoHundredGramsOfPickAndMix() {
+        return aKiloOfPickAndMix().updateProductUnits(new BigDecimal(".2"));
     }
 }

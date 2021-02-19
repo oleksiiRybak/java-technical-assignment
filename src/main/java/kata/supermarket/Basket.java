@@ -7,17 +7,18 @@ import java.util.Collections;
 import java.util.List;
 
 public class Basket {
-    private final List<Item> items;
+	
+    private final List<Product> items;
 
     public Basket() {
         this.items = new ArrayList<>();
     }
 
-    public void add(final Item item) {
+    public void add(final Product item) {
         this.items.add(item);
     }
 
-    List<Item> items() {
+    List<Product> items() {
         return Collections.unmodifiableList(items);
     }
 
@@ -26,14 +27,14 @@ public class Basket {
     }
 
     private class TotalCalculator {
-        private final List<Item> items;
+        private final List<Product> items;
 
         TotalCalculator() {
             this.items = items();
         }
 
         private BigDecimal subtotal() {
-            return items.stream().map(Item::price)
+            return items.stream().map(Product::price)
                     .reduce(BigDecimal::add)
                     .orElse(BigDecimal.ZERO)
                     .setScale(2, RoundingMode.HALF_UP);
