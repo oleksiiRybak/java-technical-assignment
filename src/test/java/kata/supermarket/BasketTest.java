@@ -29,9 +29,25 @@ class BasketTest {
                 aSingleItemPricedPerUnit(),
                 multipleItemsPricedPerUnit(),
                 aSingleItemPricedByWeight(),
-                multipleItemsPricedByWeight()
+                multipleItemsPricedByWeight()                
         );
     }
+    
+    @DisplayName("basket provides its total value when containing...")
+    @MethodSource
+    @ParameterizedTest(name = "{0}")
+    void basketProvidesTotalValueWithDiscount(String description, String expectedTotal, Iterable<Product> items) {
+        final Basket basket = new Basket();
+        items.forEach(basket::add);
+        assertEquals(new BigDecimal(expectedTotal), basket.totalWithDiscounts());
+    }
+
+    static Stream<Arguments> basketProvidesTotalValueWithDiscount() {
+        return Stream.of(
+        		aSingleItemPricedPerUnitHalfPriceDiscount()                
+        );
+    }
+    
 
     private static Arguments aSingleItemPricedByWeight() {
         return Arguments.of("a single weighed item", "1.25", Collections.singleton(twoFiftyGramsOfAmericanSweets()));
@@ -50,6 +66,10 @@ class BasketTest {
 
     private static Arguments aSingleItemPricedPerUnit() {
         return Arguments.of("a single item priced per unit", "0.49", Collections.singleton(aPintOfMilk()));
+    }
+    
+    private static Arguments aSingleItemPricedPerUnitHalfPriceDiscount() {
+        return Arguments.of("a single item priced per unit", "0.25", Collections.singleton(aPintOfMilk()));
     }
 
     private static Arguments noItems() {

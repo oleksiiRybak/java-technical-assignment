@@ -5,6 +5,7 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class Basket {
 	
@@ -26,6 +27,10 @@ public class Basket {
     public BigDecimal total() {
         return new TotalCalculator().calculate();
     }
+    
+    public BigDecimal totalWithDiscounts() {
+        return new TotalCalculator().calculateWithDiscounts();
+    }
 
     private class TotalCalculator {
         private final List<Product> items;
@@ -34,7 +39,7 @@ public class Basket {
             this.items = items();
         }
 
-        private BigDecimal subtotal() {
+		private BigDecimal subtotal() {
             return items.stream().map(Product::price)
                     .reduce(BigDecimal::add)
                     .orElse(BigDecimal.ZERO)
@@ -48,14 +53,17 @@ public class Basket {
          *  Think about how Basket could interact with something
          *  which provides that functionality.
          */
-        private BigDecimal discounts() {
-        	Discount discount = new DiscountGenerator(items, new DiscountZero());
+        private BigDecimal discounts(Supplier<DiscountType> discountType) {
+        	Discount discount = new DiscountGenerator(items, discountType);
         	return discount.calculateDiscount();
         }
                 
-        private BigDecimal calculate() {
-        	BigDecimal discounts = discounts();
-            return subtotal().subtract(discounts);
+        private BigDecimal calculate() {        	
+            return subtotal().subtract(discounts(() -> new DiscountZero()));
         }
+        
+        public BigDecimal calculateWithDiscounts() {
+			return subtotal().subtract(discounts(() -> new DiscountFifty()));
+		}
     }
 }
