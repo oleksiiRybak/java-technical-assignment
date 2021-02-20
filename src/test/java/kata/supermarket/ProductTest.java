@@ -1,5 +1,6 @@
 package kata.supermarket;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -13,5 +14,13 @@ class ProductTest {
         final BigDecimal price = new BigDecimal("2.49");
         ProductValue prodDetails = new ProductPrice(new BigDecimal("2.49"), new BigDecimal("1"));
         assertEquals(price, new Product(prodDetails).price());
+    }
+    
+    @Test
+    void expectEarlyNullPointerExceptionFromProductCreation() {
+    	Assertions.assertThrows(NullPointerException.class, () -> {
+    		ProductValue prodDetails = null;
+            Product product = new Product(prodDetails);
+    	  });
     }
 }

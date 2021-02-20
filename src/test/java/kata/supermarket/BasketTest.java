@@ -33,7 +33,7 @@ class BasketTest {
         );
     }
     
-    @DisplayName("basket provides its total value when containing...")
+    @DisplayName("basket provides its total value with discount ...")
     @MethodSource
     @ParameterizedTest(name = "{0}")
     void basketProvidesTotalValueWithDiscount(String description, String expectedTotal, Iterable<Product> items) {
@@ -44,7 +44,10 @@ class BasketTest {
 
     static Stream<Arguments> basketProvidesTotalValueWithDiscount() {
         return Stream.of(
-        		aSingleItemPricedPerUnitHalfPriceDiscount()                
+        		aSingleItemPricedPerUnitHalfPriceDiscount(),
+        		multipleItemsPricedPerUnitWithPriceHalved(),
+        		aSingleItemPricedByWeightWithHalvedDiscount(),
+        		multipleItemsPricedByWeightWithHalvedDiscount()
         );
     }
     
@@ -52,15 +55,30 @@ class BasketTest {
     private static Arguments aSingleItemPricedByWeight() {
         return Arguments.of("a single weighed item", "1.25", Collections.singleton(twoFiftyGramsOfAmericanSweets()));
     }
+    
+    private static Arguments aSingleItemPricedByWeightWithHalvedDiscount() {
+        return Arguments.of("a single weighed item with 1/2 discount", ".63", Collections.singleton(twoFiftyGramsOfAmericanSweets()));
+    }
 
     private static Arguments multipleItemsPricedByWeight() {
         return Arguments.of("multiple weighed items", "1.85",
                 Arrays.asList(twoFiftyGramsOfAmericanSweets(), twoHundredGramsOfPickAndMix())
         );
     }
+    
+    private static Arguments multipleItemsPricedByWeightWithHalvedDiscount() {
+        return Arguments.of("multiple weighed items with 1/2 discount", ".93",
+                Arrays.asList(twoFiftyGramsOfAmericanSweets(), twoHundredGramsOfPickAndMix())
+        );
+    }
 
     private static Arguments multipleItemsPricedPerUnit() {
         return Arguments.of("multiple items priced per unit", "2.04",
+                Arrays.asList(aPackOfDigestives(), aPintOfMilk()));
+    }
+    
+    private static Arguments multipleItemsPricedPerUnitWithPriceHalved() {
+        return Arguments.of("multiple items priced per unit with price halved", "1.02",
                 Arrays.asList(aPackOfDigestives(), aPintOfMilk()));
     }
 
