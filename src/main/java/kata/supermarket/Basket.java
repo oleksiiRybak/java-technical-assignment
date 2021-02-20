@@ -13,7 +13,7 @@ public class Basket {
     Discount discount;
     // Here I included a simple boolean (for brevity) to differentiate what type of discount we are working with.
     //In a more complex real-life scenario this might be an enum-type or a String type or any other pre-defined value 
-    // from a collection
+    // from a collection or a set of values
     boolean discountZero = false;
 
     public Basket(boolean discountZero) {
@@ -60,7 +60,8 @@ public class Basket {
         }
                 
         private BigDecimal calculate() {
-        	// this if condition be replaced with stragety or factory pattern here
+        	// this if-condition could be replaced with stragety or factory pattern here 
+        	// in case here are more if-else clauses
         	if(discountZero) {
         		return subtotal().subtract(discounts(() -> new DiscountZero()));
         	} else {
