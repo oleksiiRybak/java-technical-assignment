@@ -18,7 +18,7 @@ class BasketTest {
     @MethodSource
     @ParameterizedTest(name = "{0}")
     void basketProvidesTotalValue(String description, String expectedTotal, Iterable<Product> items) {
-        final Basket basket = new Basket();
+        final Basket basket = new Basket(true);
         items.forEach(basket::add);
         assertEquals(new BigDecimal(expectedTotal), basket.total());
     }
@@ -37,9 +37,9 @@ class BasketTest {
     @MethodSource
     @ParameterizedTest(name = "{0}")
     void basketProvidesTotalValueWithDiscount(String description, String expectedTotal, Iterable<Product> items) {
-        final Basket basket = new Basket();
+        final Basket basket = new Basket(false);
         items.forEach(basket::add);
-        assertEquals(new BigDecimal(expectedTotal), basket.totalWithDiscounts());
+        assertEquals(new BigDecimal(expectedTotal), basket.total());
     }
 
     static Stream<Arguments> basketProvidesTotalValueWithDiscount() {

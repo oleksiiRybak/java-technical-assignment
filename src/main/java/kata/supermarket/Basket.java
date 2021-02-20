@@ -11,9 +11,14 @@ public class Basket {
 	
     private final List<Product> items;
     Discount discount;
+    // Here I included a simple boolean (for brevity) to differentiate what type of discount we are working with.
+    //In a more complex real-life scenario this might be an enum-type or a String type or any other pre-defined value 
+    // from a collection
+    boolean discountZero = false;
 
-    public Basket() {
-        this.items = new ArrayList<>();
+    public Basket(boolean discountZero) {
+        this.items = new ArrayList<>();        
+        this.discountZero = discountZero;
     }
 
     public void add(final Product item) {
@@ -28,10 +33,6 @@ public class Basket {
         return new TotalCalculator().calculate();
     }
     
-    public BigDecimal totalWithDiscounts() {
-        return new TotalCalculator().calculateWithDiscounts();
-    }
-
     private class TotalCalculator {
         private final List<Product> items;
 
@@ -54,16 +55,18 @@ public class Basket {
          *  which provides that functionality.
          */
         private BigDecimal discounts(Supplier<DiscountType> discountType) {
-        	Discount discount = new DiscountGenerator(items, discountType);
+        	Discount discount = new DiscountPercentGenerator(items, discountType);
         	return discount.calculateDiscount();
         }
                 
-        private BigDecimal calculate() {        	
-            return subtotal().subtract(discounts(() -> new DiscountZero()));
+        private BigDecimal calculate() {
+        	// this if condition be replaced with stragety or factory pattern here
+        	if(discountZero) {
+        		return subtotal().subtract(discounts(() -> new DiscountZero()));
+        	} else {
+        		return subtotal().subtract(discounts(() -> new DiscountFifty()));
+        	}
         }
         
-        public BigDecimal calculateWithDiscounts() {
-			return subtotal().subtract(discounts(() -> new DiscountFifty()));
-		}
     }
 }
