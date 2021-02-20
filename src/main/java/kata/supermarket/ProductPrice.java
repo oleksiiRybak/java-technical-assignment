@@ -2,6 +2,7 @@ package kata.supermarket;
 
 import java.math.BigDecimal;
 import java.util.Objects;
+import static org.apache.commons.lang3.Validate.notNull;
 
 public class ProductPrice implements ProductValue {
 	
@@ -9,11 +10,9 @@ public class ProductPrice implements ProductValue {
 	BigDecimal units = new BigDecimal(0.0);
 	
 	public ProductPrice(BigDecimal price, BigDecimal units) {
-		Objects.nonNull(price);
-		Objects.nonNull(units);	
+		this.price = notNull(price);
+		this.units = notNull(units);
 		
-		this.price = price;
-		this.units = units;		
 	}
 
 	@Override

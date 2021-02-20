@@ -9,10 +9,11 @@ import org.apache.commons.lang3.Validate;
 public class Product {
 	
 	private ProductValue prodDetails;
+	String productName;
     
-    public Product(final ProductValue prodDetails) {
-    	notNull(prodDetails);  	
-        this.prodDetails = prodDetails;
+    public Product(String productName, final ProductValue prodDetails) {
+    	this.prodDetails = notNull(prodDetails);
+        this.productName = notNull(productName);
     }
 
     BigDecimal price() {

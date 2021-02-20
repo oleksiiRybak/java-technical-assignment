@@ -13,14 +13,14 @@ class ProductTest {
     void singleItemHasExpectedUnitPriceFromProduct() {
         final BigDecimal price = new BigDecimal("2.49");
         ProductValue prodDetails = new ProductPrice(new BigDecimal("2.49"), new BigDecimal("1"));
-        assertEquals(price, new Product(prodDetails).price());
+        assertEquals(price, new Product("randomItem", prodDetails).price());
     }
     
     @Test
     void expectEarlyNullPointerExceptionFromProductCreation() {
     	Assertions.assertThrows(NullPointerException.class, () -> {
     		ProductValue prodDetails = null;
-            Product product = new Product(prodDetails);
+            Product product = new Product("randomItem", prodDetails);
     	  });
     }
 }
