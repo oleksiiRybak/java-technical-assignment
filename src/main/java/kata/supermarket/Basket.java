@@ -9,6 +9,7 @@ import java.util.List;
 public class Basket {
 	
     private final List<Product> items;
+    Discount discount;
 
     public Basket() {
         this.items = new ArrayList<>();
@@ -48,11 +49,13 @@ public class Basket {
          *  which provides that functionality.
          */
         private BigDecimal discounts() {
-            return BigDecimal.ZERO;
+        	Discount discount = new DiscountGenerator(items, new DiscountZero());
+        	return discount.calculateDiscount();
         }
-
+                
         private BigDecimal calculate() {
-            return subtotal().subtract(discounts());
+        	BigDecimal discounts = discounts();
+            return subtotal().subtract(discounts);
         }
     }
 }
